@@ -1,0 +1,9 @@
+{
+	"name": "az-covid-report-instance",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "87f56f51-3687-4385-8b08-17eec2f295d2",
+		"tenantId": "e27d2300-fdc0-4a68-b116-efd0a69a0d8a"
+	}
+}
