@@ -11,13 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_ablob_population_by_age_tsv'"
 		},
+		"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls_ecdc_data_casesanddeaths_csv'"
+		},
 		"ls_adls_populatiob_by_age_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_populatiob_by_age'"
 		},
-		"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_adls_ecdc_data_casesanddeaths_csv'"
+		"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azcovidreportingdl1.dfs.core.windows.net/"
 		},
 		"ls_adls_populatiob_by_age_properties_typeProperties_url": {
 			"type": "string",
@@ -26,10 +30,6 @@
 		"ls_http_edcd_data_casesanddeaths_csv_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://github.com"
-		},
-		"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://azcovidreportingdl1.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -61,20 +61,20 @@
 					"ls_ablob_population_by_age_tsv_connectionString": {
 						"value": "[parameters('ls_ablob_population_by_age_tsv_connectionString')]"
 					},
+					"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
+						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_accountKey')]"
+					},
 					"ls_adls_populatiob_by_age_accountKey": {
 						"value": "[parameters('ls_adls_populatiob_by_age_accountKey')]"
 					},
-					"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
-						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_accountKey')]"
+					"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
+						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url')]"
 					},
 					"ls_adls_populatiob_by_age_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls_populatiob_by_age_properties_typeProperties_url')]"
 					},
 					"ls_http_edcd_data_casesanddeaths_csv_properties_typeProperties_url": {
 						"value": "[parameters('ls_http_edcd_data_casesanddeaths_csv_properties_typeProperties_url')]"
-					},
-					"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
-						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url')]"
 					}
 				}
 			},

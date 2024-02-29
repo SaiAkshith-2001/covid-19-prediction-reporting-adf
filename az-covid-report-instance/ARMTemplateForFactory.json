@@ -11,13 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_ablob_population_by_age_tsv'"
 		},
+		"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adls_ecdc_data_casesanddeaths_csv'"
+		},
 		"ls_adls_populatiob_by_age_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_populatiob_by_age'"
 		},
-		"ls_adls_ecdc_data_casesanddeaths_csv_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_adls_ecdc_data_casesanddeaths_csv'"
+		"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://azcovidreportingdl1.dfs.core.windows.net/"
 		},
 		"ls_adls_populatiob_by_age_properties_typeProperties_url": {
 			"type": "string",
@@ -26,16 +30,90 @@
 		"ls_http_edcd_data_casesanddeaths_csv_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://github.com"
-		},
-		"ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://azcovidreportingdl1.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_ingest_ecdc_casesanddeaths')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ecdc Cases and Death",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"maxConcurrentConnections": 1,
+									"requestMethod": "GET",
+									"requestTimeout": ""
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_http_ecdc_data_casesanddeaths",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls_ecdc_casesanddeaths",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_http_ecdc_data_casesanddeaths')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls_ecdc_casesanddeaths')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_ingest_populaton')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -114,6 +192,63 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_adls_ecdc_casesanddeaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_ecdc_data_casesanddeaths_csv",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "casesanddeaths.csv",
+						"folderPath": "ecdc",
+						"fileSystem": "output"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": null
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls_ecdc_data_casesanddeaths_csv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_http_ecdc_data_casesanddeaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_http_edcd_data_casesanddeaths_csv",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": "cloudboxacademy/covid19/blob/main/ecdc_data/cases_deaths.csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_http_edcd_data_casesanddeaths_csv')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_population_by_age')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -185,6 +320,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_adls_ecdc_data_casesanddeaths_csv')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_adls_populatiob_by_age')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -215,51 +367,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_adls_ecdc_data_casesanddeaths_csv')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ls_adls_ecdc_data_casesanddeaths_csv_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_http_ecdc_data_casesanddeaths')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_http_edcd_data_casesanddeaths_csv",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": "cloudboxacademy/covid19/blob/main/ecdc_data/cases_deaths.csv"
-					},
-					"columnDelimiter": ",",
-					"rowDelimiter": "\n",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": null
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_http_edcd_data_casesanddeaths_csv')]"
-			]
 		}
 	]
 }
