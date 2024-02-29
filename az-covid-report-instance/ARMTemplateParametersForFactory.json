@@ -5,14 +5,14 @@
 		"factoryName": {
 			"value": "az-covid-report-instance"
 		},
-		"ls_ablob_azcovidreportingsa_connectionString": {
+		"ls_ablob_population_by_age_tsv_connectionString": {
 			"value": ""
 		},
-		"ls_adls_azcovidreportingdl_accountKey": {
+		"ls_adls_populatiob_by_age_accountKey": {
 			"value": ""
 		},
-		"ls_adls_azcovidreportingdl_properties_typeProperties_url": {
-			"value": "https://azcovidreportingsa.dfs.core.windows.net/"
+		"ls_adls_populatiob_by_age_properties_typeProperties_url": {
+			"value": "https://azcovidreportingdl1.dfs.core.windows.net/"
 		}
 	}
 }
