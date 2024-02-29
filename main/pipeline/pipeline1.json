@@ -19,7 +19,9 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "HttpReadSettings",
-							"requestMethod": "GET"
+							"maxConcurrentConnections": 1,
+							"requestMethod": "GET",
+							"requestTimeout": ""
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
@@ -28,11 +30,11 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"maxConcurrentConnections": 1
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
-							"maxRowsPerFile": 100,
 							"quoteAllText": true,
 							"fileExtension": ".txt"
 						}
