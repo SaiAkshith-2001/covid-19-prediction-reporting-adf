@@ -1,9 +1,9 @@
 {
-	"name": "pipeline1",
+	"name": "pl_ingest_ecdc_casesanddeaths",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "ecdc Cases and Death",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
