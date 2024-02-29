@@ -1,0 +1,21 @@
+{
+	"name": "ds_population_by_age",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_populatiob_by_age",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
+			"columnDelimiter": "\t",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
