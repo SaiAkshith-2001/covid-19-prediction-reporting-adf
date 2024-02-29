@@ -30,8 +30,7 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"maxConcurrentConnections": 1
+							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
@@ -57,7 +56,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_adls_ecdc_data_casesanddeaths",
+						"referenceName": "ds_adls_ecdc_casesanddeaths",
 						"type": "DatasetReference"
 					}
 				]
