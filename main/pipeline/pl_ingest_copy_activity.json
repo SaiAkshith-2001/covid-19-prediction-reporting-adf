@@ -1,9 +1,9 @@
 {
-	"name": "pl_copy_activity",
+	"name": "pl_ingest_copy_activity",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "copy activity",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
